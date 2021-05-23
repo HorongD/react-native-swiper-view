@@ -40,3 +40,46 @@ const App = () => {
   );
 };
 ```
+
+<br />
+<br />
+
+# Options
+
+| Prop                      | Default | Type   | Description                                                 |
+| ------------------------- | ------- | ------ | ----------------------------------------------------------- |
+| tabList                   | []      | Tab[]  | Tab and view pair object array [{ name:'', component: '' }] |
+| tabHeaderStyles           | {}      | object | Tab header style                                            |
+| tabButtonStyles           | {}      | object | Tab button style                                            |
+| tabButtonActiveStyles     | {}      | object | Tab button style (selected)                                 |
+| tabButtonTextStyles       | {}      | object | Tab button text style                                       |
+| tabButtonTextActiveStyles | {}      | object | Tab button text style (selected)                            |
+| tabBarContainerStyles     | {}      | object | Tab bar container style                                     |
+| tabBarLineStyles          | {}      | object | Tab bar line style                                          |
+| tabBarStyles              | {}      | object | Tab bar style                                               |
+
+<br>
+
+```javascript
+<View>
+  <View style={tabHeaderStyles}>
+    <ScrollView>
+      <View>
+        <TouchableOpacity style={tabButtonStyles}>
+          {isSelected ? (
+            <Text style={[tabButtonTextStyles, tabButtonTextActiveStyles]}>
+              Selected Name
+            </Text>
+          ) : (
+            <Text style={[tabButtonTextStyles]}>Name</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+      <View style={tabBarContainerStyles}>
+        <View style={tabBarLineStyles}></View>
+        <View style={tabBarStyles}></View>
+      </View>
+    </ScrollView>
+  </View>
+</View>
+```
