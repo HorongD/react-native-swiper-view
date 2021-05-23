@@ -20,11 +20,6 @@
       "prettier --write ."
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "keywords": [
     "react-native-component",
     "react-component",
