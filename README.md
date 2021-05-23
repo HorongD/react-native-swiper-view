@@ -26,5 +26,8 @@ const App = () => {
         { name: 'BEST', component: <Text style={textStyle}>BEST</Text> },
         { name: 'BRAND', component: <Text style={textStyle}>BRAND</Text> },
         { name: 'EVENT', component: <Text style={textStyle}>EVENT</Text> },
-
+      ]}
+    />
+  )
+}
 ```
