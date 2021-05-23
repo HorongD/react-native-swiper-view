@@ -1,16 +1,13 @@
 {
   "name": "react-native-swiper-view",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "Swiper view component for React Native",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "lint": "eslint --ext .tsx --ext .ts src/",
     "format": "prettier --check ./src",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "rm -rf Develop/dist && tsc -w --outDir Develop/dist",
-    "prepare": "rm -rf dist && tsc"
+    "start": "rm -rf Develop/dist && tsc -w --outDir Develop/dist"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
