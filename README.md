@@ -65,14 +65,20 @@ const App = () => {
   <View style={tabHeaderStyles}>
     <ScrollView>
       <View>
-        <TouchableOpacity style={tabButtonStyles}>
-          {isSelected ? (
-            <Text style={[tabButtonTextStyles, tabButtonTextActiveStyles]}>
-              Selected Name
-            </Text>
-          ) : (
-            <Text style={[tabButtonTextStyles]}>Name</Text>
-          )}
+        <TouchableOpacity
+          style={
+            isSelected
+              ? [tabButtonStyles, tabButtonActiveStyles]
+              : [tabButtonStyles]
+          }
+        >
+          <Text
+            style={
+              isSelected
+                ? [tabButtonTextStyles, tabButtonTextActiveStyles]
+                : [tabButtonTextStyles]
+            }
+          ></Text>
         </TouchableOpacity>
       </View>
       <View style={tabBarContainerStyles}>
