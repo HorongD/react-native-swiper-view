@@ -1,22 +1,9 @@
 {
   "name": "react-native-swiper-view",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "description": "Swiper view component for React Native",
   "main": "index.js",
   "types": "index.d.ts",
-  "scripts": {
-    "lint": "eslint --ext .tsx --ext .ts src/",
-    "format": "prettier --check ./src",
-    "start": "rm -rf Develop/dist && tsc -w --outDir Develop/dist"
-  },
-  "lint-staged": {
-    "src/**/*.{ts,tsx}": [
-      "eslint --ext .tsx --ext .ts src/ --fix"
-    ],
-    "./src/**": [
-      "prettier --write ."
-    ]
-  },
   "keywords": [
     "react-native-component",
     "react-component",
@@ -48,23 +35,6 @@
   },
   "devDependencies": {
     "@types/react": "*",
-    "@types/react-native": "*",
-    "@typescript-eslint/eslint-plugin": "2.25.0",
-    "@typescript-eslint/parser": "2.25.0",
-    "eslint": "6.8.0",
-    "eslint-plugin-prettier": "3.1.2",
-    "eslint-plugin-react": "7.19.0",
-    "eslint-plugin-react-hooks": "2.5.1",
-    "husky": "4.2.3",
-    "lint-staged": "10.0.9",
-    "prettier": "2.0.2",
-    "react": "*",
-    "react-native": "*",
-    "typescript": "^3.7.5",
-    "metro-react-native-babel-preset": "^0.66.0",
-    "react-test-renderer": "17.0.1"
-  },
-  "jest": {
-    "preset": "react-native"
+    "@types/react-native": "*"
   }
 }
