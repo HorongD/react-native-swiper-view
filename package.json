@@ -20,9 +20,10 @@
     "type": "git",
     "url": "git+https://github.com/HorongD/react-native-swiper-view.git"
   },
-  "author": "Jisung Hong <dgf5820@gmail.com>, mk myeong",
+  "author": "Horong <dgf5820@gmail.com>, mkmyeong <mkmyeong@gmail.com>",
   "contributors": [
-    "mk myeong"
+    "Horong",
+    "mkmyeong"
   ],
   "license": "MIT",
   "bugs": {
