@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   tabScrollContainer: {
     flexDirection: 'column',
     width: '100%',
-    minWidth: WIDTH,
   },
   tabButtonList: {
     flexDirection: 'row',
