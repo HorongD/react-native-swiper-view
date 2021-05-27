@@ -1,4 +1,4 @@
-import { Animated, LayoutChangeEvent, View } from "react-native";
+import { Animated, LayoutChangeEvent, ScrollView, View } from "react-native";
 import { IMeasure, ITab } from "../types";
 import Tab from "./Tab";
 import Indicator from "./Indicator";
@@ -7,11 +7,13 @@ import React, { useRef, useState } from "react";
 interface TabsProps {
   tabList: ITab[];
   scrollX: Animated.Value;
-  onTabPress: (index: number) => void
+  onTabPress: (index: number) => void;
+  measures: IMeasure[];
+  setMeasures: React.Dispatch<React.SetStateAction<IMeasure[]>>;
+  setScrollContainerWidth: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Tabs ({ tabList = [], scrollX, onTabPress }: TabsProps) {
-  const [measures, setMeasures] = useState<IMeasure[]>([]);
+export default function Tabs ({ tabList = [], scrollX, onTabPress, measures, setMeasures, setScrollContainerWidth }: TabsProps) {
   const containerRef = useRef<any>(null);
   
   const measureData: IMeasure[] = [];
@@ -30,7 +32,9 @@ export default function Tabs ({ tabList = [], scrollX, onTabPress }: TabsProps) 
   }
 
   return (
-    <View style={{ }}>
+    <View onLayout={(e) =>
+      setScrollContainerWidth(e.nativeEvent.layout.width)
+    }>
       <View ref={containerRef} style={{ flexDirection: 'row' }}>
         {tabList.map((tab, i) => (
           <Tab
