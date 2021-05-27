@@ -22,12 +22,12 @@ export default function Indicator({
   const inputRange = tabList.map((_, index) => index * WIDTH);
   const indicatorWidth = scrollX.interpolate({
     inputRange,
-    outputRange: measures.map((measure) => measure.width),
+    outputRange: measures.map((measure) => Math.floor(measure.width)),
     easing: Easing.inOut(Easing.linear),
   });
   const indicatorTranslateX = scrollX.interpolate({
     inputRange,
-    outputRange: measures.map((measure) => measure.x),
+    outputRange: measures.map((measure) => Math.floor(measure.x + measure.width/2)),
     easing: Easing.inOut(Easing.linear),
   });
 
@@ -37,9 +37,9 @@ export default function Indicator({
         styles.tabBar,
         tabBarStyles,
         {
-          width: indicatorWidth,
+          width: 1,
           left: 0,
-          transform: [{ translateX: indicatorTranslateX }],
+          transform: [{ translateX: indicatorTranslateX }, { scaleX: indicatorWidth }],
           height: 3,
         },
         { backgroundColor:tabBarColor}
