@@ -14,8 +14,8 @@ import {
 const WIDTH = Dimensions.get('window').width;
 
 interface Tab {
-  name: string,
-  component: ReactElement,
+  name: string;
+  component: ReactElement;
 }
 
 interface Props {
@@ -93,14 +93,12 @@ const SwiperView = ({
         <ScrollView
           ref={tabScrollRef}
           horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
+          showsHorizontalScrollIndicator={false}>
           <View
             style={styles.tabScrollContainer}
             onLayout={(e) =>
               setScrollContainerWidth(e.nativeEvent.layout.width)
-            }
-          >
+            }>
             <View style={styles.tabButtonList}>
               {tabList.map((tab, i) => (
                 <TouchableOpacity
@@ -130,8 +128,7 @@ const SwiperView = ({
                       ...tabDetails,
                       [i]: { x: Math.round(x), width: Math.round(width) },
                     });
-                  }}
-                >
+                  }}>
                   <Text
                     style={[
                       styles.tabButtonText,
@@ -142,8 +139,7 @@ const SwiperView = ({
                             ...tabButtonTextActiveStyles,
                           }
                         : {},
-                    ]}
-                  >
+                    ]}>
                     {tab.name}
                   </Text>
                 </TouchableOpacity>
@@ -161,8 +157,7 @@ const SwiperView = ({
                       { scaleX: widthScale },
                     ],
                   },
-                ]}
-              ></Animated.View>
+                ]}></Animated.View>
             </View>
           </View>
         </ScrollView>
@@ -173,8 +168,7 @@ const SwiperView = ({
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         pagingEnabled={true}
-        snapToAlignment="center"
-      >
+        snapToAlignment="center">
         {tabList.map((tab, i) => (
           <View
             key={i}
@@ -182,8 +176,7 @@ const SwiperView = ({
               width: WIDTH,
               justifyContent: 'center',
               alignItems: 'center',
-            }}
-          >
+            }}>
             {tab.component}
           </View>
         ))}

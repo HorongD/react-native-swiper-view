@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 // import ScrollTabView from './src';
-import ScrollTabView from './src/v2/index';
+import ScrollTabView from './src/index';
 
 const textStyle = { color: '#f57791', fontSize: 50 };
 

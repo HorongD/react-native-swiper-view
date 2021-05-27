@@ -1,25 +1,11 @@
-import React, { ReactElement, useRef, useState } from 'react';
-import {
-  Animated,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-  Dimensions,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-} from 'react-native';
-
-const WIDTH = Dimensions.get('window').width;
-
-interface Tab {
-  name: string,
-  component: ReactElement,
-}
-
-interface Props {
-  tabList: Tab[];
+import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import { Animated, ScrollView, View } from 'react-native';
+import Tabs from './components/Tabs';
+import { WIDTH } from './constants';
+import styles from './styles';
+import { IMeasure, ITab } from './types';
+interface SwiperViewProps {
+  tabList: ITab[];
   tabHeaderStyles: object;
   tabButtonStyles: object;
   tabButtonActiveStyles: object;
@@ -28,9 +14,13 @@ interface Props {
   tabBarContainerStyles: object;
   tabBarLineStyles: object;
   tabBarStyles: object;
+  tabHeaderColor: string;
+  tabTextColor: string;
+  tabBarColor: string;
+  tabTextSelectedColor: string;
 }
 
-const SwiperView = ({
+export default function SwiperView({
   tabList = [],
   tabHeaderStyles = {},
   tabButtonStyles = {},
@@ -40,141 +30,89 @@ const SwiperView = ({
   tabBarContainerStyles = {},
   tabBarLineStyles = {},
   tabBarStyles = {},
-}: Props) => {
-  const sceneScrollRef = useRef<ScrollView>(null);
-  const tabScrollRef = useRef<ScrollView>(null);
-  const [tabDetails, setTabDetails] = useState({});
-  const [currentPositionX] = useState(new Animated.Value(0));
-  const [widthScale] = useState(new Animated.Value(0));
-  const [scrollContainerWidth, setScrollContainerWidth] = useState(0);
-  const [tabIndex, setTabIndex] = useState(0);
+  tabHeaderColor = '#f57791',
+  tabTextColor = '#ffffff88',
+  tabBarColor = '#ffffff88',
+  tabTextSelectedColor = '#ffffff',
+}: SwiperViewProps): ReactElement {
+  const scrollRef = useRef<ScrollView>(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollHeaderRef = useRef<ScrollView>(null);
+  const [scrollContainerWidth, setScrollContainerWidth] = useState<number>(0);
+  const [measures, setMeasures] = useState<IMeasure[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const moveHeaderScroll = (moveIndex: number) => {
+    setCurrentIndex(moveIndex);
+    if (measures[moveIndex]) {
+      const { x, width } = measures[moveIndex];
+      const offsetX = x + width - WIDTH;
+      const space = Math.floor(width / 3);
 
-  function moveBar(index: number) {
-    Animated.parallel([
-      Animated.timing(currentPositionX, {
-        toValue: new Animated.Value(
-          tabDetails[index]?.x + Math.floor(tabDetails[index]?.width / 2),
-        ),
-        useNativeDriver: true,
-        duration: 200,
-      }),
-      Animated.timing(widthScale, {
-        toValue: new Animated.Value(tabDetails[index]?.width / 1.15),
-        useNativeDriver: true,
-        duration: 200,
-      }),
-    ]).start();
-
-    const offsetX =
-      Number(tabDetails[index]?.x) + Number(tabDetails[index]?.width) - WIDTH;
-
-    const space = Number(tabDetails[index]?.width / 3);
-
-    if (offsetX > 0) {
-      tabScrollRef.current?.scrollTo({
-        x: offsetX + space > scrollContainerWidth ? offsetX : offsetX + space,
-        y: 0,
-      });
-    } else {
-      tabScrollRef.current?.scrollTo({ x: 0, y: 0 });
+      if (offsetX > 0) {
+        scrollHeaderRef.current?.scrollTo({
+          x: offsetX + space > scrollContainerWidth ? offsetX : offsetX + space,
+          y: 0,
+        });
+      } else {
+        scrollHeaderRef.current?.scrollTo({ x: 0, y: 0 });
+      }
     }
-  }
-
-  function handleScrollEnd(e: NativeSyntheticEvent<NativeScrollEvent>) {
-    const scrollX = e.nativeEvent.contentOffset.x; // 총 이동거리
-    const moveIndex = Math.floor(scrollX / WIDTH + 0.5); // 현재 화면 인덱스
-    moveBar(moveIndex);
-    setTabIndex(moveIndex);
-  }
+  };
+  const onTabPress = useCallback((index) => {
+    moveHeaderScroll(index);
+    scrollRef.current?.scrollTo({ x: index * WIDTH, y: 0 });
+  }, []);
 
   return (
     <View style={styles.container}>
-      <View style={[styles.tabHeader, tabHeaderStyles]}>
+      <View
+        style={[
+          styles.tabHeader,
+          tabHeaderStyles,
+          { backgroundColor: tabHeaderColor },
+        ]}>
         <ScrollView
-          ref={tabScrollRef}
+          ref={scrollHeaderRef}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-        >
-          <View
-            style={styles.tabScrollContainer}
-            onLayout={(e) =>
-              setScrollContainerWidth(e.nativeEvent.layout.width)
-            }
-          >
-            <View style={styles.tabButtonList}>
-              {tabList.map((tab, i) => (
-                <TouchableOpacity
-                  key={i}
-                  style={[
-                    styles.tabButton,
-                    tabButtonStyles,
-                    tabIndex === i
-                      ? {
-                          ...styles.tabButtonActive,
-                          ...tabButtonActiveStyles,
-                        }
-                      : {},
-                  ]}
-                  onPress={() => {
-                    sceneScrollRef.current?.scrollTo({ x: WIDTH * i, y: 0 });
-                    moveBar(i);
-                    setTabIndex(i);
-                  }}
-                  onLayout={(e) => {
-                    const { x, width } = e.nativeEvent.layout;
-                    if (tabDetails[0] === undefined && i === 0) {
-                      widthScale.setValue(width);
-                      currentPositionX.setValue(width / 2);
-                    }
-                    setTabDetails({
-                      ...tabDetails,
-                      [i]: { x: Math.round(x), width: Math.round(width) },
-                    });
-                  }}
-                >
-                  <Text
-                    style={[
-                      styles.tabButtonText,
-                      tabButtonTextStyles,
-                      tabIndex === i
-                        ? {
-                            ...styles.tabButtonTextActive,
-                            ...tabButtonTextActiveStyles,
-                          }
-                        : {},
-                    ]}
-                  >
-                    {tab.name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={[styles.tabBarContainer, tabBarContainerStyles]}>
-              <View style={[styles.tabBarLine, tabBarLineStyles]}></View>
-              <Animated.View
-                style={[
-                  styles.tabBar,
-                  tabBarStyles,
-                  {
-                    transform: [
-                      { translateX: currentPositionX },
-                      { scaleX: widthScale },
-                    ],
-                  },
-                ]}
-              ></Animated.View>
-            </View>
-          </View>
+          bounces={false}>
+          <Tabs
+            scrollX={scrollX}
+            tabList={tabList}
+            onTabPress={onTabPress}
+            measures={measures}
+            setMeasures={setMeasures}
+            setScrollContainerWidth={setScrollContainerWidth}
+            currentIndex={currentIndex}
+            tabButtonStyles={tabButtonStyles}
+            tabButtonActiveStyles={tabButtonActiveStyles}
+            tabButtonTextStyles={tabButtonTextStyles}
+            tabButtonTextActiveStyles={tabButtonTextActiveStyles}
+            tabBarContainerStyles={tabBarContainerStyles}
+            tabBarLineStyles={tabBarLineStyles}
+            tabBarStyles={tabBarStyles}
+            tabTextColor={tabTextColor}
+            tabBarColor={tabBarColor}
+            tabTextSelectedColor={tabTextSelectedColor}
+          />
         </ScrollView>
       </View>
       <ScrollView
-        ref={sceneScrollRef}
-        onMomentumScrollEnd={handleScrollEnd}
+        ref={scrollRef}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         pagingEnabled={true}
+        bounces={false}
         snapToAlignment="center"
-      >
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false },
+        )}
+        onMomentumScrollEnd={(e) => {
+          const scrollX = e.nativeEvent.contentOffset.x; // 총 이동거리
+          const moveIndex = Math.floor(scrollX / WIDTH + 0.5); // 현재 화면 인덱스
+          moveHeaderScroll(moveIndex);
+        }}>
         {tabList.map((tab, i) => (
           <View
             key={i}
@@ -182,75 +120,11 @@ const SwiperView = ({
               width: WIDTH,
               justifyContent: 'center',
               alignItems: 'center',
-            }}
-          >
+            }}>
             {tab.component}
           </View>
         ))}
       </ScrollView>
     </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  tabHeader: {
-    position: 'relative',
-    height: 50,
-    width: '100%',
-    backgroundColor: '#f57791',
-  },
-  tabScrollContainer: {
-    flexDirection: 'column',
-    width: '100%',
-    minWidth: WIDTH,
-  },
-  tabButtonList: {
-    flexDirection: 'row',
-  },
-  tabButton: {
-    paddingHorizontal: 20,
-    height: 50,
-    backgroundColor: '#f57791',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabButtonActive: {},
-  tabButtonText: {
-    color: '#ffffff88',
-    fontSize: 16,
-    height: 50,
-    lineHeight: 50,
-  },
-  tabButtonTextActive: {
-    color: '#ffffff',
-    fontWeight: 'bold',
-  },
-  tabBarContainer: {
-    position: 'absolute',
-    flexDirection: 'row',
-    width: '100%',
-    height: 8,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    zIndex: 100,
-    bottom: 0,
-  },
-  tabBarLine: {
-    backgroundColor: '#f57791',
-    width: '100%',
-    height: 1,
-  },
-  tabBar: {
-    position: 'absolute',
-    backgroundColor: '#ffffff',
-    height: 3,
-    width: 1,
-    left: 0,
-  },
-});
-
-export default SwiperView;
+}
