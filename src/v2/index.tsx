@@ -1,5 +1,5 @@
 import React, { createRef, forwardRef, MutableRefObject, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Dimensions, Easing, LayoutChangeEvent, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styles from './styles';
 import { ITab, IMeasure } from './types';
 
@@ -29,36 +29,22 @@ interface TabsProps {
 const Tabs = ({ tabList = [], scrollX, onTabPress }: TabsProps) => {
   const [measures, setMeasures] = useState<IMeasure[]>([]);
   const containerRef = useRef<any>(null);
+  
+  const measureData: IMeasure[] = [];
 
-  useEffect(() => {
-    const m: IMeasure[] = [];
-
-    tabList.forEach(tab => {
-      tab.ref?.current?.measureLayout(
-        containerRef.current,
-        (x, y, width, height) => {
-          m.push({
-            x: Math.round(x),
-            y: Math.round(y),
-            width: Math.round(width),
-            height: Math.round(height),
-          });
-          
-          if (m.length === tabList.length) {
-            setMeasures(m);
-          }
-        },
-        ()=>{
-          console.log('Fail : no ref');
-        })
-    });
-  }, []);
+  function addMeasure(e: LayoutChangeEvent) {
+    console.log(e.nativeEvent.layout);
+    measureData.push(e.nativeEvent.layout);
+    if(measureData.length === tabList.length) {
+      setMeasures(measureData);
+    }
+  }
 
   return (
     <View style={{ width: WIDTH }}>
       <View ref={containerRef} style={{ flexDirection: 'row' }}>
         {tabList.map((tab, i) => (
-          <View key={i} ref={tab.ref}>
+          <View key={i} ref={tab.ref} onLayout={addMeasure}>
             <TouchableOpacity onPress={() => onTabPress(i)}>
               <Text>{tab.name}</Text>
             </TouchableOpacity>
@@ -80,12 +66,12 @@ const Indicator = ({ tabList = [], measures, scrollX }: IndicatorProps) => {
   const inputRange = tabList.map((_, index) => index * WIDTH);
   const indicatorWidth = scrollX.interpolate({
     inputRange,
-    outputRange: measures.map(measure => measure.width),
+    outputRange: measures.map(measure => Math.round(measure.width)),
     easing: Easing.inOut(Easing.linear),
   });
   const indicatorTranslateX = scrollX.interpolate({
     inputRange,
-    outputRange: measures.map(measure => measure.x),
+    outputRange: measures.map(measure => Math.round(measure.x)),
     easing: Easing.inOut(Easing.linear),
   });
 
