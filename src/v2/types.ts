@@ -1,5 +1,4 @@
-import { ReactElement, RefObject } from "react";
-import { View } from "react-native";
+import { ReactElement } from "react";
 
 export interface ITab {
   name: string,

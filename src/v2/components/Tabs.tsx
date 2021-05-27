@@ -1,8 +1,8 @@
-import { Animated, LayoutChangeEvent, ScrollView, View } from "react-native";
+import { Animated, LayoutChangeEvent, View } from "react-native";
 import { IMeasure, ITab } from "../types";
 import Tab from "./Tab";
 import Indicator from "./Indicator";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 interface TabsProps {
   tabList: ITab[];
