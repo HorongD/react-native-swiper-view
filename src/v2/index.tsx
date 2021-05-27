@@ -14,6 +14,10 @@ interface SwiperViewProps {
   tabBarContainerStyles: object;
   tabBarLineStyles: object;
   tabBarStyles: object;
+  tabHeaderColor: string;
+  tabTextColor: string;
+  tabBarColor: string;
+  tabTextSelectedColor: string;
 }
 
 export default function SwiperView({
@@ -26,6 +30,10 @@ export default function SwiperView({
   tabBarContainerStyles = {},
   tabBarLineStyles = {},
   tabBarStyles = {},
+  tabHeaderColor = '#f57791',
+  tabTextColor = '#ffffff88',
+  tabBarColor = '#ffffff88',
+  tabTextSelectedColor= '#ffffff',
 }: SwiperViewProps): ReactElement {
   const scrollRef = useRef<ScrollView>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -57,7 +65,12 @@ export default function SwiperView({
 
   return (
     <View style={styles.container}>
-      <View style={[styles.tabHeader, tabHeaderStyles]}>
+      <View
+        style={[
+          styles.tabHeader,
+          tabHeaderStyles,
+          { backgroundColor: tabHeaderColor },
+        ]}>
         <ScrollView
           ref={scrollHeaderRef}
           horizontal={true}
@@ -78,6 +91,9 @@ export default function SwiperView({
             tabBarContainerStyles={tabBarContainerStyles}
             tabBarLineStyles={tabBarLineStyles}
             tabBarStyles={tabBarStyles}
+            tabTextColor={tabTextColor}
+            tabBarColor={tabBarColor}
+            tabTextSelectedColor={tabTextSelectedColor}
           />
         </ScrollView>
       </View>

@@ -8,18 +8,16 @@ interface IndicatorProps {
   tabList: ITab[];
   measures: IMeasure[];
   scrollX: Animated.Value;
-  tabBarContainerStyles: object;
-  tabBarLineStyles: object;
   tabBarStyles: object;
+  tabBarColor: string;
 }
 
 export default function Indicator({
   tabList = [],
   measures,
   scrollX,
-  tabBarContainerStyles,
-  tabBarLineStyles,
   tabBarStyles,
+  tabBarColor
 }: IndicatorProps) {
   const inputRange = tabList.map((_, index) => index * WIDTH);
   const indicatorWidth = scrollX.interpolate({
@@ -44,6 +42,7 @@ export default function Indicator({
           transform: [{ translateX: indicatorTranslateX }],
           height: 3,
         },
+        { backgroundColor:tabBarColor}
       ]}></Animated.View>
   );
 }

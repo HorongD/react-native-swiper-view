@@ -12,6 +12,8 @@ interface TabProps {
   tabButtonTextActiveStyles: object;
   onTabPress: () => void;
   onTabLayout: (e: LayoutChangeEvent) => void;
+  tabTextColor: string;
+  tabTextSelectedColor: string;
 }
 
 export default function Tab({
@@ -23,6 +25,8 @@ export default function Tab({
   tabButtonTextActiveStyles,
   onTabPress,
   onTabLayout,
+  tabTextColor,
+  tabTextSelectedColor,
 }: TabProps) {
   return (
     <View onLayout={onTabLayout}>
@@ -39,17 +43,20 @@ export default function Tab({
             : {},
         ]}>
         <Text
-        style={[
-          styles.tabButtonText,
-          tabButtonTextStyles,
-          isSelected
-            ? {
-                ...styles.tabButtonTextActive,
-                ...tabButtonTextActiveStyles,
-              }
-            : {},
-        ]}
-        >{tab.name}123</Text>
+          style={[
+            styles.tabButtonText,
+            tabButtonTextStyles,
+            { color: tabTextColor },
+            isSelected
+              ? {
+                  ...styles.tabButtonTextActive,
+                  ...tabButtonTextActiveStyles,
+                  color: tabTextSelectedColor,
+                }
+              : {},
+          ]}>
+          {tab.name}123
+        </Text>
       </TouchableOpacity>
     </View>
   );

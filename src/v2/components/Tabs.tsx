@@ -19,6 +19,9 @@ interface TabsProps {
   tabBarContainerStyles: object;
   tabBarLineStyles: object;
   tabBarStyles: object;
+  tabTextColor: string;
+  tabBarColor: string;
+  tabTextSelectedColor: string;
 }
 
 export default function Tabs({
@@ -33,9 +36,10 @@ export default function Tabs({
   tabButtonActiveStyles,
   tabButtonTextStyles,
   tabButtonTextActiveStyles,
-  tabBarContainerStyles,
-  tabBarLineStyles,
   tabBarStyles,
+  tabTextColor,
+  tabBarColor,
+  tabTextSelectedColor,
 }: TabsProps) {
   const containerRef = useRef<any>(null);
 
@@ -68,6 +72,8 @@ export default function Tabs({
             tabButtonActiveStyles={tabButtonActiveStyles}
             tabButtonTextStyles={tabButtonTextStyles}
             tabButtonTextActiveStyles={tabButtonTextActiveStyles}
+            tabTextColor={tabTextColor}
+            tabTextSelectedColor={tabTextSelectedColor}
           />
         ))}
       </View>
@@ -76,9 +82,8 @@ export default function Tabs({
           tabList={tabList}
           measures={measures}
           scrollX={scrollX}
-          tabBarContainerStyles={tabBarContainerStyles}
-          tabBarLineStyles={tabBarLineStyles}
           tabBarStyles={tabBarStyles}
+          tabBarColor={tabBarColor}
         />
       )}
     </View>
