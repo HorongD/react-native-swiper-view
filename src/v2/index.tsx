@@ -8,15 +8,16 @@ const WIDTH = Dimensions.get('window').width;
 interface TabProps {
   tab: ITab;
   onTabPress: () => void;
+  onTabLayout: (e: LayoutChangeEvent) => void;
 }
 
-const Tab = forwardRef(({ tab, onTabPress }: TabProps, ref: MutableRefObject<View>) => {
+const Tab = forwardRef(({ tab, onTabPress, onTabLayout }: TabProps, ref: MutableRefObject<View>) => {
   return (
-    <View ref={ref}>
-      <TouchableOpacity onPress={onTabPress}>
-        <Text>{tab.name}</Text>
-      </TouchableOpacity>
-    </View>
+    <View ref={ref} onLayout={onTabLayout}>
+    <TouchableOpacity onPress={() => onTabPress()}>
+      <Text>{tab.name}</Text>
+    </TouchableOpacity>
+  </View>
   )
 })
 
@@ -44,11 +45,13 @@ const Tabs = ({ tabList = [], scrollX, onTabPress }: TabsProps) => {
     <View style={{ width: WIDTH }}>
       <View ref={containerRef} style={{ flexDirection: 'row' }}>
         {tabList.map((tab, i) => (
-          <View key={i} ref={tab.ref} onLayout={addMeasure}>
-            <TouchableOpacity onPress={() => onTabPress(i)}>
-              <Text>{tab.name}</Text>
-            </TouchableOpacity>
-          </View>
+          <Tab 
+            key={i} 
+            ref={tab.ref} 
+            tab={tab} 
+            onTabLayout={addMeasure} 
+            onTabPress={() => onTabPress(i)}
+          />
         ))}
       </View>
       {measures.length > 0 && <Indicator tabList={tabList} measures={measures} scrollX={scrollX} />}
@@ -105,7 +108,9 @@ export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
 
   return (
     <View style={styles.container}>
-      <Tabs scrollX={scrollX} tabList={tabList} onTabPress={onTabPress} />
+      <ScrollView>
+        <Tabs scrollX={scrollX} tabList={tabList} onTabPress={onTabPress} />
+      </ScrollView>
       <ScrollView
         ref={scrollRef}
         horizontal={true}
