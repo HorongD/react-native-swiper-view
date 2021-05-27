@@ -58,10 +58,10 @@ export default function SwiperView({
       }
     }
   };
-  const onTabPress = useCallback((index) => {
+  const onTabPress = (index: number) => {
     moveHeaderScroll(index);
     scrollRef.current?.scrollTo({ x: index * WIDTH, y: 0 });
-  }, []);
+  };
 
   return (
     <View style={styles.container}>
