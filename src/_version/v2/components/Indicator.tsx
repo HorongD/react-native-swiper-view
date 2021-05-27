@@ -1,5 +1,5 @@
 import React from 'react';
-import { Animated, Easing, View } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { WIDTH } from '../constants';
 import styles from '../styles';
 import { IMeasure, ITab } from '../types';
