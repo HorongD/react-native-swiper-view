@@ -53,10 +53,11 @@ const styles = StyleSheet.create({
   },
   tabBar: {
     position: 'absolute',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#ffffff88',
     height: 3,
     width: 1,
     left: 0,
+    bottom: 0,
   },
 });
 

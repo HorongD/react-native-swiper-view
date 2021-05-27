@@ -6,26 +6,48 @@ import styles from './styles';
 import { IMeasure, ITab } from './types';
 interface SwiperViewProps {
   tabList: ITab[];
+  tabHeaderStyles: object;
+  tabButtonStyles: object;
+  tabButtonActiveStyles: object;
+  tabButtonTextStyles: object;
+  tabButtonTextActiveStyles: object;
+  tabBarContainerStyles: object;
+  tabBarLineStyles: object;
+  tabBarStyles: object;
 }
 
-export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
+export default function SwiperView({
+  tabList = [],
+  tabHeaderStyles = {},
+  tabButtonStyles = {},
+  tabButtonActiveStyles = {},
+  tabButtonTextStyles = {},
+  tabButtonTextActiveStyles = {},
+  tabBarContainerStyles = {},
+  tabBarLineStyles = {},
+  tabBarStyles = {},
+}: SwiperViewProps): ReactElement {
   const scrollRef = useRef<ScrollView>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
   const scrollHeaderRef = useRef<ScrollView>(null);
   const [scrollContainerWidth, setScrollContainerWidth] = useState<number>(0);
   const [measures, setMeasures] = useState<IMeasure[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const moveHeaderScroll = (moveIndex: number) => {
-    const { x, width } = measures[moveIndex];
-    const offsetX = x + width - WIDTH;
-    const space = Math.floor(width / 3);
+    setCurrentIndex(moveIndex);
+    if (measures[moveIndex]) {
+      const { x, width } = measures[moveIndex];
+      const offsetX = x + width - WIDTH;
+      const space = Math.floor(width / 3);
 
-    if (offsetX > 0) {
-      scrollHeaderRef.current?.scrollTo({
-        x: offsetX + space > scrollContainerWidth ? offsetX : offsetX + space,
-        y: 0,
-      });
-    } else {
-      scrollHeaderRef.current?.scrollTo({ x: 0, y: 0 });
+      if (offsetX > 0) {
+        scrollHeaderRef.current?.scrollTo({
+          x: offsetX + space > scrollContainerWidth ? offsetX : offsetX + space,
+          y: 0,
+        });
+      } else {
+        scrollHeaderRef.current?.scrollTo({ x: 0, y: 0 });
+      }
     }
   };
   const onTabPress = useCallback((index) => {
@@ -35,20 +57,30 @@ export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        ref={scrollHeaderRef}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        bounces={false}>
-        <Tabs
-          scrollX={scrollX}
-          tabList={tabList}
-          onTabPress={onTabPress}
-          measures={measures}
-          setMeasures={setMeasures}
-          setScrollContainerWidth={setScrollContainerWidth}
-        />
-      </ScrollView>
+      <View style={[styles.tabHeader, tabHeaderStyles]}>
+        <ScrollView
+          ref={scrollHeaderRef}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          bounces={false}>
+          <Tabs
+            scrollX={scrollX}
+            tabList={tabList}
+            onTabPress={onTabPress}
+            measures={measures}
+            setMeasures={setMeasures}
+            setScrollContainerWidth={setScrollContainerWidth}
+            currentIndex={currentIndex}
+            tabButtonStyles={tabButtonStyles}
+            tabButtonActiveStyles={tabButtonActiveStyles}
+            tabButtonTextStyles={tabButtonTextStyles}
+            tabButtonTextActiveStyles={tabButtonTextActiveStyles}
+            tabBarContainerStyles={tabBarContainerStyles}
+            tabBarLineStyles={tabBarLineStyles}
+            tabBarStyles={tabBarStyles}
+          />
+        </ScrollView>
+      </View>
       <ScrollView
         ref={scrollRef}
         horizontal={true}
@@ -60,7 +92,7 @@ export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false },
         )}
-        onScrollEndDrag={(e) => {
+        onMomentumScrollEnd={(e) => {
           const scrollX = e.nativeEvent.contentOffset.x; // 총 이동거리
           const moveIndex = Math.floor(scrollX / WIDTH + 0.5); // 현재 화면 인덱스
           moveHeaderScroll(moveIndex);

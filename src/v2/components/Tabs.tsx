@@ -11,6 +11,14 @@ interface TabsProps {
   measures: IMeasure[];
   setMeasures: React.Dispatch<React.SetStateAction<IMeasure[]>>;
   setScrollContainerWidth: React.Dispatch<React.SetStateAction<number>>;
+  currentIndex: number;
+  tabButtonStyles: object;
+  tabButtonActiveStyles: object;
+  tabButtonTextStyles: object;
+  tabButtonTextActiveStyles: object;
+  tabBarContainerStyles: object;
+  tabBarLineStyles: object;
+  tabBarStyles: object;
 }
 
 export default function Tabs({
@@ -20,6 +28,14 @@ export default function Tabs({
   measures,
   setMeasures,
   setScrollContainerWidth,
+  currentIndex,
+  tabButtonStyles,
+  tabButtonActiveStyles,
+  tabButtonTextStyles,
+  tabButtonTextActiveStyles,
+  tabBarContainerStyles,
+  tabBarLineStyles,
+  tabBarStyles,
 }: TabsProps) {
   const containerRef = useRef<any>(null);
 
@@ -47,11 +63,23 @@ export default function Tabs({
             tab={tab}
             onTabLayout={addMeasure}
             onTabPress={() => onTabPress(i)}
+            isSelected={i === currentIndex}
+            tabButtonStyles={tabButtonStyles}
+            tabButtonActiveStyles={tabButtonActiveStyles}
+            tabButtonTextStyles={tabButtonTextStyles}
+            tabButtonTextActiveStyles={tabButtonTextActiveStyles}
           />
         ))}
       </View>
       {measures.length > 0 && (
-        <Indicator tabList={tabList} measures={measures} scrollX={scrollX} />
+        <Indicator
+          tabList={tabList}
+          measures={measures}
+          scrollX={scrollX}
+          tabBarContainerStyles={tabBarContainerStyles}
+          tabBarLineStyles={tabBarLineStyles}
+          tabBarStyles={tabBarStyles}
+        />
       )}
     </View>
   );
