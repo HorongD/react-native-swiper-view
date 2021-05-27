@@ -1,4 +1,4 @@
-import React, { forwardRef, MutableRefObject, ReactElement } from "react";
+import React from "react";
 import { LayoutChangeEvent, Text, TouchableOpacity, View } from "react-native";
 import { ITab } from "../types";
 
@@ -8,14 +8,12 @@ interface TabProps {
   onTabLayout: (e: LayoutChangeEvent) => void;
 }
 
-const Tab = forwardRef(({ tab, onTabPress, onTabLayout }: TabProps, ref: MutableRefObject<View>) => {
+export default function Tab({ tab, onTabPress, onTabLayout }: TabProps) {
   return (
-    <View ref={ref} onLayout={onTabLayout}>
-    <TouchableOpacity onPress={() => onTabPress()}>
-      <Text>{tab.name}</Text>
-    </TouchableOpacity>
-  </View>
+    <View onLayout={onTabLayout}>
+      <TouchableOpacity onPress={() => onTabPress()}>
+        <Text>{tab.name}</Text>
+      </TouchableOpacity>
+    </View>
   )
-})
-
-export default Tab;
+};

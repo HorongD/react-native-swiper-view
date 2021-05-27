@@ -16,9 +16,6 @@ export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
     [],
   )
 
-  // Add ref props
-  tabList.forEach(tab => tab.ref = createRef<View>());
-
   return (
     <View style={styles.container}>
       <ScrollView

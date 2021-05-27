@@ -35,7 +35,6 @@ export default function Tabs ({ tabList = [], scrollX, onTabPress }: TabsProps) 
         {tabList.map((tab, i) => (
           <Tab
             key={i} 
-            ref={tab.ref} 
             tab={tab} 
             onTabLayout={addMeasure} 
             onTabPress={() => onTabPress(i)}

@@ -4,7 +4,6 @@ import { View } from "react-native";
 export interface ITab {
   name: string,
   component: ReactElement,
-  ref?: RefObject<View>;
 }
 
 export interface IMeasure {
