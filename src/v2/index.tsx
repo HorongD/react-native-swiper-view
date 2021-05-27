@@ -1,96 +1,9 @@
-import React, { createRef, forwardRef, MutableRefObject, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, Easing, LayoutChangeEvent, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { createRef, ReactElement, useCallback, useRef } from 'react';
+import { Animated, ScrollView, View } from 'react-native';
+import Tabs from './components/Tabs';
+import { WIDTH } from './constants';
 import styles from './styles';
-import { ITab, IMeasure } from './types';
-
-const WIDTH = Dimensions.get('window').width;
-
-interface TabProps {
-  tab: ITab;
-  onTabPress: () => void;
-  onTabLayout: (e: LayoutChangeEvent) => void;
-}
-
-const Tab = forwardRef(({ tab, onTabPress, onTabLayout }: TabProps, ref: MutableRefObject<View>) => {
-  return (
-    <View ref={ref} onLayout={onTabLayout}>
-    <TouchableOpacity onPress={() => onTabPress()}>
-      <Text>{tab.name}</Text>
-    </TouchableOpacity>
-  </View>
-  )
-})
-
-interface TabsProps {
-  tabList: ITab[];
-  scrollX: Animated.Value;
-  onTabPress: (index: number) => void
-}
-
-const Tabs = ({ tabList = [], scrollX, onTabPress }: TabsProps) => {
-  const [measures, setMeasures] = useState<IMeasure[]>([]);
-  const containerRef = useRef<any>(null);
-  
-  const measureData: IMeasure[] = [];
-
-  function addMeasure(e: LayoutChangeEvent) {
-    console.log(e.nativeEvent.layout);
-    measureData.push(e.nativeEvent.layout);
-    if(measureData.length === tabList.length) {
-      setMeasures(measureData);
-    }
-  }
-
-  return (
-    <View style={{ width: WIDTH }}>
-      <View ref={containerRef} style={{ flexDirection: 'row' }}>
-        {tabList.map((tab, i) => (
-          <Tab 
-            key={i} 
-            ref={tab.ref} 
-            tab={tab} 
-            onTabLayout={addMeasure} 
-            onTabPress={() => onTabPress(i)}
-          />
-        ))}
-      </View>
-      {measures.length > 0 && <Indicator tabList={tabList} measures={measures} scrollX={scrollX} />}
-    </View>
-  )
-};
-
-interface IndicatorProps {
-  tabList: ITab[];
-  measures: IMeasure[];
-  scrollX: Animated.Value;
-}
-
-const Indicator = ({ tabList = [], measures, scrollX }: IndicatorProps) => {
-  const inputRange = tabList.map((_, index) => index * WIDTH);
-  const indicatorWidth = scrollX.interpolate({
-    inputRange,
-    outputRange: measures.map(measure => Math.round(measure.width)),
-    easing: Easing.inOut(Easing.linear),
-  });
-  const indicatorTranslateX = scrollX.interpolate({
-    inputRange,
-    outputRange: measures.map(measure => Math.round(measure.x)),
-    easing: Easing.inOut(Easing.linear),
-  });
-
-  return (
-    <Animated.View style={[
-      {
-        width: indicatorWidth,
-        left: 0,
-        transform: [{ translateX: indicatorTranslateX }]
-      },
-      { backgroundColor: "#f57791", height: 3 }
-    ]}>
-    </Animated.View>
-  )
-}
-
+import { ITab } from './types';
 interface SwiperViewProps {
   tabList: ITab[];
 }
@@ -108,7 +21,11 @@ export default function SwiperView({ tabList }: SwiperViewProps): ReactElement {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+      >
         <Tabs scrollX={scrollX} tabList={tabList} onTabPress={onTabPress} />
       </ScrollView>
       <ScrollView
