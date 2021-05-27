@@ -54,7 +54,7 @@ export default function Tabs({
       y: Math.round(y),
     });
     if (measureData.length === tabList.length) {
-      setMeasures(measureData);
+      setMeasures(measureData.sort((a, b) => a.x - b.x));
     }
   }
 
