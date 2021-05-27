@@ -1,8 +1,8 @@
-import { Animated, LayoutChangeEvent, View } from "react-native";
-import { IMeasure, ITab } from "../types";
-import Tab from "./Tab";
-import Indicator from "./Indicator";
-import React, { useRef } from "react";
+import { Animated, LayoutChangeEvent, View } from 'react-native';
+import { IMeasure, ITab } from '../types';
+import Tab from './Tab';
+import Indicator from './Indicator';
+import React, { useRef } from 'react';
 
 interface TabsProps {
   tabList: ITab[];
@@ -13,9 +13,16 @@ interface TabsProps {
   setScrollContainerWidth: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function Tabs ({ tabList = [], scrollX, onTabPress, measures, setMeasures, setScrollContainerWidth }: TabsProps) {
+export default function Tabs({
+  tabList = [],
+  scrollX,
+  onTabPress,
+  measures,
+  setMeasures,
+  setScrollContainerWidth,
+}: TabsProps) {
   const containerRef = useRef<any>(null);
-  
+
   const measureData: IMeasure[] = [];
 
   function addMeasure(e: LayoutChangeEvent) {
@@ -26,26 +33,26 @@ export default function Tabs ({ tabList = [], scrollX, onTabPress, measures, set
       x: Math.round(x),
       y: Math.round(y),
     });
-    if(measureData.length === tabList.length) {
+    if (measureData.length === tabList.length) {
       setMeasures(measureData);
     }
   }
 
   return (
-    <View onLayout={(e) =>
-      setScrollContainerWidth(e.nativeEvent.layout.width)
-    }>
+    <View onLayout={(e) => setScrollContainerWidth(e.nativeEvent.layout.width)}>
       <View ref={containerRef} style={{ flexDirection: 'row' }}>
         {tabList.map((tab, i) => (
           <Tab
-            key={i} 
-            tab={tab} 
-            onTabLayout={addMeasure} 
+            key={i}
+            tab={tab}
+            onTabLayout={addMeasure}
             onTabPress={() => onTabPress(i)}
           />
         ))}
       </View>
-      {measures.length > 0 && <Indicator tabList={tabList} measures={measures} scrollX={scrollX} />}
+      {measures.length > 0 && (
+        <Indicator tabList={tabList} measures={measures} scrollX={scrollX} />
+      )}
     </View>
-  )
-};
+  );
+}
