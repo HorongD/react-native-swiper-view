@@ -49,11 +49,7 @@ export default function SwiperView(_a) {
         var moveIndex = Math.floor(scrollX / WIDTH + 0.5);
         moveHeaderScroll(moveIndex);
     }}>
-        {tabList.map(function (tab, i) { return (<View key={i} style={{
-        width: WIDTH,
-        justifyContent: 'center',
-        alignItems: 'center',
-    }}>
+        {tabList.map(function (tab, i) { return (<View key={i} style={{ width: WIDTH }}>
             {tab.component}
           </View>); })}
       </ScrollView>

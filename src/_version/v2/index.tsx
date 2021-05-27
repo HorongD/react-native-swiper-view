@@ -33,7 +33,7 @@ export default function SwiperView({
   tabHeaderColor = '#f57791',
   tabTextColor = '#ffffff88',
   tabBarColor = '#ffffff88',
-  tabTextSelectedColor = '#ffffff',
+  tabTextSelectedColor= '#ffffff',
 }: SwiperViewProps): ReactElement {
   const scrollRef = useRef<ScrollView>(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -58,10 +58,10 @@ export default function SwiperView({
       }
     }
   };
-  const onTabPress = (index: number) => {
+  const onTabPress = useCallback((index) => {
     moveHeaderScroll(index);
     scrollRef.current?.scrollTo({ x: index * WIDTH, y: 0 });
-  };
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -114,13 +114,7 @@ export default function SwiperView({
           moveHeaderScroll(moveIndex);
         }}>
         {tabList.map((tab, i) => (
-          <View
-            key={i}
-            style={{
-              width: WIDTH,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          <View key={i} style={{ width: WIDTH }}>
             {tab.component}
           </View>
         ))}
