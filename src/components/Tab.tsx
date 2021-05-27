@@ -55,7 +55,7 @@ export default function Tab({
                 }
               : {},
           ]}>
-          {tab.name}123
+          {tab.name}
         </Text>
       </TouchableOpacity>
     </View>
