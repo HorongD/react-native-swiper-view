@@ -1,10 +1,7 @@
 import { ReactElement } from 'react';
-interface Tab {
-    name: string;
-    component: ReactElement;
-}
-interface Props {
-    tabList: Tab[];
+import { ITab } from './types';
+interface SwiperViewProps {
+    tabList: ITab[];
     tabHeaderStyles: object;
     tabButtonStyles: object;
     tabButtonActiveStyles: object;
@@ -13,7 +10,11 @@ interface Props {
     tabBarContainerStyles: object;
     tabBarLineStyles: object;
     tabBarStyles: object;
+    tabHeaderColor: string;
+    tabTextColor: string;
+    tabBarColor: string;
+    tabTextSelectedColor: string;
 }
-declare const SwiperView: ({ tabList, tabHeaderStyles, tabButtonStyles, tabButtonActiveStyles, tabButtonTextStyles, tabButtonTextActiveStyles, tabBarContainerStyles, tabBarLineStyles, tabBarStyles, }: Props) => JSX.Element;
-export default SwiperView;
+export default function SwiperView({ tabList, tabHeaderStyles, tabButtonStyles, tabButtonActiveStyles, tabButtonTextStyles, tabButtonTextActiveStyles, tabBarContainerStyles, tabBarLineStyles, tabBarStyles, tabHeaderColor, tabTextColor, tabBarColor, tabTextSelectedColor, }: SwiperViewProps): ReactElement;
+export {};
 //# sourceMappingURL=index.d.ts.map
